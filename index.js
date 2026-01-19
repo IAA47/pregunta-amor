@@ -1,80 +1,81 @@
 const yesBtn = document.querySelector('#yesBtn');
 const noBtn = document.querySelector('#noBtn');
 
+// Función para cambiar el color del texto cada segundo
+function cambiarColorTexto() {
+    const texto = document.querySelector('p');
+    const colores = [
+        '#FFFFFF', // Blanco
+        '#FFEB3B', // Amarillo
+        '#00E5FF', // Cyan
+        '#FF4081', // Rosa
+        '#00E676', // Verde brillante
+        '#FF9800', // Naranja
+        '#E040FB'  // Púrpura
+    ];
+    
+    let colorIndex = 0;
+    
+    setInterval(() => {
+        texto.style.color = colores[colorIndex];
+        colorIndex = (colorIndex + 1) % colores.length;
+    }, 1000); // Cambia cada segundo
+}
+
+// Iniciar cambio de color cuando la página cargue
+window.addEventListener('load', cambiarColorTexto);
+
+// Alerta cuando se hace clic en SÍ
 yesBtn.addEventListener('click', function() {
     alert('El día que puedas darle click en "NO" sabré que me quieres más que yo. YA SABÍA QUE TE QUIERO MÁS QUE TÚ. ❤️');
 });
 
-// Función para mover el botón "No"
-function moveNoBtn() {
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
-    const buttonWidth = noBtn.offsetWidth;
-    const buttonHeight = noBtn.offsetHeight;
+// Función para mover el botón NO
+function moverBotonNo() {
+    const contenedor = document.querySelector('.contenedor');
+    const botonNo = noBtn;
     
-    // Calcular márgenes seguros
-    const margin = 20;
-    const maxX = windowWidth - buttonWidth - margin;
-    const maxY = windowHeight - buttonHeight - margin;
+    // Obtener dimensiones
+    const containerWidth = contenedor.offsetWidth;
+    const containerHeight = contenedor.offsetHeight;
+    const buttonWidth = botonNo.offsetWidth;
+    const buttonHeight = botonNo.offsetHeight;
     
-    // Asegurar que las posiciones sean válidas
-    let randomX, randomY;
+    // Calcular posición aleatoria asegurando que no se salga
+    const maxX = containerWidth - buttonWidth - 20;
+    const maxY = containerHeight - buttonHeight - 20;
     
     if (maxX > 0 && maxY > 0) {
-        randomX = Math.floor(Math.random() * maxX);
-        randomY = Math.floor(Math.random() * maxY);
-    } else {
-        // Si la pantalla es muy pequeña, usar porcentajes
-        randomX = Math.floor(Math.random() * 80);
-        randomY = Math.floor(Math.random() * 80);
-        noBtn.style.left = randomX + '%';
-        noBtn.style.top = randomY + '%';
-        noBtn.style.transform = 'translate(-50%, -50%)';
-        return;
+        const randomX = Math.floor(Math.random() * maxX);
+        const randomY = Math.floor(Math.random() * maxY);
+        
+        botonNo.style.position = 'absolute';
+        botonNo.style.left = randomX + 'px';
+        botonNo.style.top = randomY + 'px';
     }
-    
-    // Asegurar que no se salga de la pantalla
-    randomX = Math.max(margin, Math.min(randomX, maxX));
-    randomY = Math.max(margin, Math.min(randomY, maxY));
-    
-    // Aplicar la posición
-    noBtn.style.position = 'fixed';
-    noBtn.style.left = randomX + 'px';
-    noBtn.style.top = randomY + 'px';
-    noBtn.style.transform = 'none';
 }
 
-// Eventos para desktop (ratón)
-noBtn.addEventListener('mouseover', moveNoBtn);
-noBtn.addEventListener('mouseenter', moveNoBtn);
-
-// Eventos para móviles (touch)
+// Eventos para mover el botón NO
+noBtn.addEventListener('mouseover', moverBotonNo);
 noBtn.addEventListener('touchstart', function(e) {
     e.preventDefault();
-    moveNoBtn();
+    moverBotonNo();
 });
 
-noBtn.addEventListener('touchmove', function(e) {
-    e.preventDefault();
-    moveNoBtn();
-});
-
-// Para evitar que el usuario pueda mantener presionado el botón en móviles
-noBtn.addEventListener('touchend', function(e) {
-    e.preventDefault();
-    moveNoBtn();
-});
-
-// También mover cuando se acerca el dedo (simulación de hover)
+// Para dispositivos móviles: mover cuando el dedo se acerca
 document.addEventListener('touchmove', function(e) {
     const touch = e.touches[0];
     const noBtnRect = noBtn.getBoundingClientRect();
+    const btnCenterX = noBtnRect.left + noBtnRect.width / 2;
+    const btnCenterY = noBtnRect.top + noBtnRect.height / 2;
     
-    // Si el dedo está cerca del botón (50px)
-    const distanceX = Math.abs(touch.clientX - (noBtnRect.left + noBtnRect.width/2));
-    const distanceY = Math.abs(touch.clientY - (noBtnRect.top + noBtnRect.height/2));
+    // Calcular distancia entre el dedo y el botón
+    const distanciaX = Math.abs(touch.clientX - btnCenterX);
+    const distanciaY = Math.abs(touch.clientY - btnCenterY);
+    const distancia = Math.sqrt(distanciaX * distanciaX + distanciaY * distanciaY);
     
-    if (distanceX < 50 && distanceY < 50) {
-        moveNoBtn();
+    // Si el dedo está a menos de 100px del botón, moverlo
+    if (distancia < 100) {
+        moverBotonNo();
     }
 }, { passive: false });
