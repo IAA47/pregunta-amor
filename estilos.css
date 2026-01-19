@@ -5,162 +5,120 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    overflow-x: hidden;
-    background-color: #000; /* Fondo negro por si la imagen no carga */
+    font-family: Arial, sans-serif;
+    overflow: hidden;
 }
 
 .contenedor {
     background: url('Ale.jpeg') no-repeat center center;
     background-size: cover;
+    background-attachment: fixed;
     width: 100vw;
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    position: relative;
     padding: 20px;
 }
 
-/* Capa oscura para mejorar legibilidad del texto sobre la imagen */
-.contenedor::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    z-index: 1;
-}
-
 p {
-    font-size: clamp(1.5rem, 5vw, 3.5rem); /* Tamaño responsivo */
+    font-size: clamp(1.5rem, 5vw, 3rem); /* Tamaño responsive */
     color: white;
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
-    margin-bottom: 2rem;
-    padding: 1rem 1.5rem;
+    margin-bottom: 40px;
+    padding: 15px 20px;
     background-color: rgba(0, 0, 0, 0.6);
     border-radius: 15px;
-    position: relative;
-    z-index: 2;
     max-width: 90%;
     line-height: 1.4;
+    word-wrap: break-word;
 }
 
 .botones-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
     position: relative;
     width: 100%;
     max-width: 500px;
-    height: auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    margin-top: 1rem;
-    z-index: 2;
 }
 
 button {
-    font-size: clamp(1.2rem, 4vw, 1.8rem); /* Tamaño responsivo */
-    padding: clamp(0.8rem, 3vw, 1.2rem) clamp(1.5rem, 4vw, 2.5rem);
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    padding: 15px 30px;
     border: none;
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
-    position: relative;
-    z-index: 10;
     min-width: 120px;
-    flex-shrink: 0;
+    font-weight: bold;
 }
 
 #yesBtn {
-    background-color: #4CAF50;
+    background: linear-gradient(145deg, #4CAF50, #45a049);
     color: white;
     box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
 }
 
-#yesBtn:hover {
-    background-color: #45a049;
+#yesBtn:hover, #yesBtn:active {
+    background: linear-gradient(145deg, #45a049, #3d8b40);
     transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
 }
 
 #noBtn {
-    background-color: #f44336;
+    background: linear-gradient(145deg, #f44336, #da190b);
     color: white;
     box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
+    position: relative;
 }
 
-#noBtn:hover {
-    background-color: #da190b;
-    transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(244, 67, 54, 0.6);
+#noBtn:hover, #noBtn:active {
+    background: linear-gradient(145deg, #da190b, #c4190b);
 }
 
-/* Media queries para ajustes específicos */
+/* Media Queries para móviles */
 @media (max-width: 768px) {
     .contenedor {
-        padding: 15px;
+        padding: 10px;
+        justify-content: space-evenly;
     }
     
     p {
-        font-size: clamp(1.3rem, 4vw, 2.5rem);
-        padding: 0.8rem 1.2rem;
-        margin-bottom: 1.5rem;
+        font-size: clamp(1.2rem, 6vw, 2rem);
+        padding: 12px 15px;
+        margin-bottom: 20px;
+        max-width: 95%;
     }
     
     .botones-container {
         flex-direction: column;
         gap: 15px;
-        width: 90%;
+        margin-top: 20px;
     }
     
     button {
-        width: 100%;
+        width: 80%;
         max-width: 250px;
-        padding: 1rem 2rem;
+        padding: 12px 24px;
+        font-size: 1.3rem;
     }
 }
 
 @media (max-width: 480px) {
     p {
-        font-size: 1.5rem;
-        padding: 0.7rem 1rem;
-        margin-bottom: 1.2rem;
-    }
-    
-    .botones-container {
-        gap: 12px;
-    }
-    
-    button {
         font-size: 1.3rem;
-        padding: 0.9rem 1.8rem;
-        min-width: 100px;
-    }
-}
-
-/* Para pantallas muy grandes */
-@media (min-width: 1200px) {
-    p {
-        font-size: 3.5rem;
-        max-width: 80%;
-    }
-    
-    .botones-container {
-        max-width: 600px;
+        padding: 10px 12px;
+        line-height: 1.3;
     }
     
     button {
-        font-size: 2rem;
-        padding: 1.3rem 3rem;
+        width: 90%;
+        padding: 10px 20px;
+        font-size: 1.2rem;
     }
 }
