@@ -1,55 +1,49 @@
 const yesBtn = document.getElementById('yesBtn');
 const noBtn = document.getElementById('noBtn');
-const botonesContainer = document.querySelector('.botones-container');
 
 // Alerta cuando se hace clic en SÍ
 yesBtn.addEventListener('click', function() {
     alert('El día que puedas darle click en "NO" sabré que me quieres más que yo. YA SABÍA QUE TE QUIERO MÁS QUE TÚ. ❤️');
 });
 
-// Variables para controlar el movimiento del botón NO
+// Variables para controlar el movimiento
 let isMoving = false;
 let moveTimeout;
+let lastMoveTime = 0;
 
-// Función para obtener una posición aleatoria DENTRO del contenedor
+// Función para obtener una posición aleatoria en TODA LA PANTALLA
 function getRandomPosition() {
-    const containerRect = botonesContainer.getBoundingClientRect();
-    const buttonRect = noBtn.getBoundingClientRect();
+    // Obtener dimensiones de la ventana
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
     
-    // Dimensiones del contenedor y del botón
-    const containerWidth = containerRect.width;
-    const containerHeight = containerRect.height;
-    const buttonWidth = buttonRect.width;
-    const buttonHeight = buttonRect.height;
+    // Obtener dimensiones del botón
+    const buttonWidth = noBtn.offsetWidth;
+    const buttonHeight = noBtn.offsetHeight;
     
-    // Calcular márgenes seguros (el botón debe estar completamente dentro)
-    const margin = 5; // Pequeño margen
-    const maxX = containerWidth - buttonWidth - margin;
-    const maxY = containerHeight - buttonHeight - margin;
+    // Calcular márgenes seguros para que el botón no se salga
+    const margin = 10;
+    const maxX = windowWidth - buttonWidth - margin;
+    const maxY = windowHeight - buttonHeight - margin;
     
-    // Si el contenedor es muy pequeño, usar porcentajes
+    // Si la pantalla es muy pequeña, asegurar posiciones válidas
     if (maxX <= 0 || maxY <= 0) {
         return {
-            x: Math.random() * 30, // Porcentaje
-            y: Math.random() * 30, // Porcentaje
-            usePercentage: true
+            x: Math.random() * (windowWidth - buttonWidth),
+            y: Math.random() * (windowHeight - buttonHeight)
         };
     }
     
-    // Calcular posición aleatoria en píxeles
+    // Calcular posición aleatoria
     const randomX = Math.floor(Math.random() * maxX) + margin;
     const randomY = Math.floor(Math.random() * maxY) + margin;
     
-    return {
-        x: randomX,
-        y: randomY,
-        usePercentage: false
-    };
+    return { x: randomX, y: randomY };
 }
 
-// Función para mover el botón NO
+// Función para mover el botón NO por TODA LA PANTALLA
 function moveNoButton() {
-    if (isMoving) return; // Evitar múltiples movimientos simultáneos
+    if (isMoving) return;
     
     isMoving = true;
     
@@ -57,53 +51,53 @@ function moveNoButton() {
     const newPos = getRandomPosition();
     
     // Aplicar la nueva posición
-    if (newPos.usePercentage) {
-        noBtn.style.left = `${newPos.x}%`;
-        noBtn.style.top = `${newPos.y}%`;
-    } else {
-        noBtn.style.left = `${newPos.x}px`;
-        noBtn.style.top = `${newPos.y}px`;
-    }
+    noBtn.style.left = `${newPos.x}px`;
+    noBtn.style.top = `${newPos.y}px`;
     
-    // Pequeño retraso antes de permitir otro movimiento
+    // Pequeña animación
+    noBtn.style.transition = 'left 0.3s ease, top 0.3s ease';
+    
+    // Permitir otro movimiento después de un breve retraso
     setTimeout(() => {
         isMoving = false;
-    }, 100);
+        noBtn.style.transition = 'left 0.1s ease, top 0.1s ease';
+    }, 300);
 }
 
 // Función para mover el botón cuando el cursor/dedo se acerca
 function startNoButtonMovement(event) {
-    // Si ya hay un timeout programado, cancelarlo
+    const now = Date.now();
+    // Limitar la frecuencia de movimiento (máximo cada 100ms)
+    if (now - lastMoveTime < 100) return;
+    
+    lastMoveTime = now;
+    
+    // Cancelar timeout anterior
     if (moveTimeout) {
         clearTimeout(moveTimeout);
     }
     
-    // Programar el movimiento después de un pequeño retraso
+    // Programar movimiento
     moveTimeout = setTimeout(() => {
         moveNoButton();
     }, 50);
 }
 
-// Eventos para DESKTOP (ratón)
+// EVENTOS PARA DESKTOP (ratón) - SE MUEVE POR ACERCAMIENTO
+
+// Mover cuando el mouse está sobre el botón
 noBtn.addEventListener('mouseover', startNoButtonMovement);
-noBtn.addEventListener('mouseenter', startNoButtonMovement);
 
-// Eventos para MÓVIL (touch)
-noBtn.addEventListener('touchstart', function(e) {
-    e.preventDefault();
-    startNoButtonMovement();
-});
-
-noBtn.addEventListener('touchmove', function(e) {
-    e.preventDefault();
-    startNoButtonMovement();
-});
-
-// También mover cuando el cursor/dedo se acerca al botón
+// Mover cuando el mouse se acerca al botón (sin tocarlo)
 document.addEventListener('mousemove', function(e) {
     const noBtnRect = noBtn.getBoundingClientRect();
-    const distanceX = Math.abs(e.clientX - (noBtnRect.left + noBtnRect.width / 2));
-    const distanceY = Math.abs(e.clientY - (noBtnRect.top + noBtnRect.height / 2));
+    
+    // Calcular distancia entre el cursor y el centro del botón
+    const centerX = noBtnRect.left + noBtnRect.width / 2;
+    const centerY = noBtnRect.top + noBtnRect.height / 2;
+    
+    const distanceX = Math.abs(e.clientX - centerX);
+    const distanceY = Math.abs(e.clientY - centerY);
     
     // Si el cursor está dentro de un radio de 100px, mover el botón
     if (distanceX < 100 && distanceY < 100) {
@@ -111,18 +105,31 @@ document.addEventListener('mousemove', function(e) {
     }
 });
 
-// Para móviles: detectar cuando el dedo está cerca
-let lastTouchTime = 0;
+// EVENTOS PARA MÓVIL (touch) - SE MUEVE AL TOCAR O ACERCARSE
+
+// Mover al tocar el botón
+noBtn.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    startNoButtonMovement();
+});
+
+// Mover al arrastrar el dedo cerca del botón
+let lastTouchMoveTime = 0;
 document.addEventListener('touchmove', function(e) {
     const now = Date.now();
-    if (now - lastTouchTime < 200) return; // Limitar frecuencia
+    // Limitar frecuencia para mejor rendimiento
+    if (now - lastTouchMoveTime < 150) return;
     
-    lastTouchTime = now;
+    lastTouchMoveTime = now;
     const touch = e.touches[0];
     const noBtnRect = noBtn.getBoundingClientRect();
     
-    const distanceX = Math.abs(touch.clientX - (noBtnRect.left + noBtnRect.width / 2));
-    const distanceY = Math.abs(touch.clientY - (noBtnRect.top + noBtnRect.height / 2));
+    // Calcular distancia entre el dedo y el centro del botón
+    const centerX = noBtnRect.left + noBtnRect.width / 2;
+    const centerY = noBtnRect.top + noBtnRect.height / 2;
+    
+    const distanceX = Math.abs(touch.clientX - centerX);
+    const distanceY = Math.abs(touch.clientY - centerY);
     
     // Si el dedo está dentro de un radio de 150px, mover el botón
     if (distanceX < 150 && distanceY < 150) {
@@ -130,24 +137,49 @@ document.addEventListener('touchmove', function(e) {
     }
 }, { passive: true });
 
-// Inicializar posición del botón NO
+// Inicializar posición aleatoria al cargar la página
 window.addEventListener('load', function() {
-    // Asegurar que el botón NO esté dentro del contenedor
-    noBtn.style.position = 'absolute';
-    noBtn.style.left = '50%';
-    noBtn.style.top = '50%';
-    noBtn.style.transform = 'translate(-50%, -50%)';
-    
-    // Forzar un reflujo para asegurar que las dimensiones sean correctas
+    // Esperar un momento para que todo cargue
     setTimeout(() => {
         moveNoButton();
-    }, 100);
+    }, 500);
 });
 
-// Ajustar el movimiento cuando cambia el tamaño de la ventana
+// Mover el botón también cuando se redimensiona la ventana
 window.addEventListener('resize', function() {
-    // Mover el botón a una posición segura cuando se redimensiona
+    // Asegurar que el botón no quede fuera de la pantalla
     setTimeout(() => {
         moveNoButton();
     }, 200);
 });
+
+// Función EXTRA: Hacer que el botón sea aún más difícil de tocar en móvil
+if ('ontouchstart' in window) {
+    // Es un dispositivo táctil
+    document.addEventListener('touchmove', function(e) {
+        // Mover el botón incluso si el dedo está en cualquier parte de la pantalla
+        // (hacerlo más difícil)
+        const touch = e.touches[0];
+        const noBtnRect = noBtn.getBoundingClientRect();
+        
+        // Calcular distancia
+        const centerX = noBtnRect.left + noBtnRect.width / 2;
+        const centerY = noBtnRect.top + noBtnRect.height / 2;
+        
+        const distanceX = Math.abs(touch.clientX - centerX);
+        const distanceY = Math.abs(touch.clientY - centerY);
+        
+        // Radio más grande para hacerlo más difícil
+        if (distanceX < 200 && distanceY < 200) {
+            startNoButtonMovement();
+        }
+    }, { passive: true });
+}
+
+// Hacer que el botón se mueva automáticamente cada cierto tiempo (solo en móvil)
+if ('ontouchstart' in window) {
+    setInterval(() => {
+        // Mover automáticamente cada 3 segundos (hacerlo difícil)
+        moveNoButton();
+    }, 3000);
+}
