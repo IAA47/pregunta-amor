@@ -1,30 +1,6 @@
 const yesBtn = document.querySelector('#yesBtn');
 const noBtn = document.querySelector('#noBtn');
 
-// Función para cambiar el color del texto cada segundo
-function cambiarColorTexto() {
-    const texto = document.querySelector('p');
-    const colores = [
-        '#FFFFFF', // Blanco
-        '#FFEB3B', // Amarillo
-        '#00E5FF', // Cyan
-        '#FF4081', // Rosa
-        '#00E676', // Verde brillante
-        '#FF9800', // Naranja
-        '#E040FB'  // Púrpura
-    ];
-    
-    let colorIndex = 0;
-    
-    setInterval(() => {
-        texto.style.color = colores[colorIndex];
-        colorIndex = (colorIndex + 1) % colores.length;
-    }, 1000); // Cambia cada segundo
-}
-
-// Iniciar cambio de color cuando la página cargue
-window.addEventListener('load', cambiarColorTexto);
-
 // Alerta cuando se hace clic en SÍ
 yesBtn.addEventListener('click', function() {
     alert('El día que puedas darle click en "NO" sabré que me quieres más que yo. YA SABÍA QUE TE QUIERO MÁS QUE TÚ. ❤️');
@@ -32,50 +8,67 @@ yesBtn.addEventListener('click', function() {
 
 // Función para mover el botón NO
 function moverBotonNo() {
-    const contenedor = document.querySelector('.contenedor');
     const botonNo = noBtn;
+    const contenedor = document.querySelector('.contenedor');
     
     // Obtener dimensiones
-    const containerWidth = contenedor.offsetWidth;
-    const containerHeight = contenedor.offsetHeight;
-    const buttonWidth = botonNo.offsetWidth;
-    const buttonHeight = botonNo.offsetHeight;
+    const containerRect = contenedor.getBoundingClientRect();
+    const buttonRect = botonNo.getBoundingClientRect();
     
-    // Calcular posición aleatoria asegurando que no se salga
-    const maxX = containerWidth - buttonWidth - 20;
-    const maxY = containerHeight - buttonHeight - 20;
+    // Calcular posiciones máximas
+    const maxX = containerRect.width - buttonRect.width - 20;
+    const maxY = containerRect.height - buttonRect.height - 20;
     
+    // Si las dimensiones son válidas
     if (maxX > 0 && maxY > 0) {
         const randomX = Math.floor(Math.random() * maxX);
         const randomY = Math.floor(Math.random() * maxY);
         
+        // Posicionar el botón
         botonNo.style.position = 'absolute';
-        botonNo.style.left = randomX + 'px';
-        botonNo.style.top = randomY + 'px';
+        botonNo.style.left = `${randomX}px`;
+        botonNo.style.top = `${randomY}px`;
     }
 }
 
 // Eventos para mover el botón NO
 noBtn.addEventListener('mouseover', moverBotonNo);
+noBtn.addEventListener('mouseenter', moverBotonNo);
+
+// Para dispositivos táctiles (móviles)
 noBtn.addEventListener('touchstart', function(e) {
     e.preventDefault();
     moverBotonNo();
 });
 
-// Para dispositivos móviles: mover cuando el dedo se acerca
+// Mover cuando el dedo se acerca (para móviles)
+let lastMoveTime = 0;
 document.addEventListener('touchmove', function(e) {
+    const now = Date.now();
+    if (now - lastMoveTime < 200) return; // Limitar a 5 veces por segundo
+    
+    lastMoveTime = now;
     const touch = e.touches[0];
     const noBtnRect = noBtn.getBoundingClientRect();
+    
+    // Calcular centro del botón
     const btnCenterX = noBtnRect.left + noBtnRect.width / 2;
     const btnCenterY = noBtnRect.top + noBtnRect.height / 2;
     
     // Calcular distancia entre el dedo y el botón
     const distanciaX = Math.abs(touch.clientX - btnCenterX);
     const distanciaY = Math.abs(touch.clientY - btnCenterY);
-    const distancia = Math.sqrt(distanciaX * distanciaX + distanciaY * distanciaY);
     
-    // Si el dedo está a menos de 100px del botón, moverlo
-    if (distancia < 100) {
+    // Si el dedo está a menos de 150px del botón, moverlo
+    if (distanciaX < 150 && distanciaY < 150) {
         moverBotonNo();
     }
 }, { passive: false });
+
+// Asegurar que el texto sea visible al cargar la página
+window.addEventListener('load', function() {
+    const texto = document.querySelector('p');
+    // Forzar color blanco
+    texto.style.color = '#FFFFFF';
+    texto.style.textShadow = '3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000';
+});
