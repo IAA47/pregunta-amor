@@ -23,6 +23,7 @@ body {
     align-items: center;
     text-align: center;
     position: relative;
+    overflow: hidden; /* Añadido para contener el botón NO */
 }
 
 /* Fondo oscuro semitransparente detrás del texto */
@@ -37,30 +38,29 @@ body {
     z-index: 1;
 }
 
-/* Contenedor del texto - AQUÍ LA CLAVE */
+/* Contenedor del texto */
 .texto-container {
     position: relative;
     z-index: 10;
     width: 90%;
     max-width: 800px;
-    margin-bottom: 50px;
-    padding: 40px 30px;
-    background: rgba(0, 0, 0, 0.85); /* Fondo casi negro */
-    border-radius: 25px;
+    margin-bottom: 30px;
+    padding: 25px 20px;
+    background: rgba(0, 0, 0, 0.85);
+    border-radius: 20px;
     box-shadow: 
-        0 0 0 10px rgba(255, 255, 255, 0.2), /* Borde blanco tenue */
-        0 15px 40px rgba(0, 0, 0, 0.9);
-    border: 3px solid #FFFFFF;
+        0 0 0 8px rgba(255, 255, 255, 0.2),
+        0 10px 30px rgba(0, 0, 0, 0.9);
+    border: 2px solid #FFFFFF;
 }
 
-/* TEXTO EN BLANCO - como solicitaste */
+/* TEXTO EN BLANCO */
 p {
-    font-size: clamp(2.5rem, 8vw, 4.5rem);
-    color: #FFFFFF !important; /* FORZAR BLANCO */
+    font-size: clamp(2rem, 6vw, 4rem); /* Reducido para móvil */
+    color: #FFFFFF !important;
     text-shadow: 
-        0px 0px 10px rgba(255, 255, 255, 0.5),
-        0px 0px 20px rgba(255, 255, 255, 0.3),
-        3px 3px 0 #000000,
+        0px 0px 8px rgba(255, 255, 255, 0.5),
+        0px 0px 15px rgba(255, 255, 255, 0.3),
         2px 2px 0 #000000,
         1px 1px 0 #000000,
         -1px -1px 0 #000000,
@@ -70,130 +70,149 @@ p {
     padding: 0;
     line-height: 1.2;
     font-weight: 900;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     text-transform: uppercase;
 }
 
-/* Contenedor de botones */
+/* Contenedor de botones - AHORA ES EL PADRE PARA EL BOTÓN NO */
 .botones-container {
     position: relative;
     z-index: 10;
+    width: 100%;
+    max-width: 600px;
+    min-height: 120px; /* Altura mínima para contener el botón NO */
     display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 40px;
-    width: 90%;
-    max-width: 600px;
-    background: rgba(0, 0, 0, 0.8);
-    padding: 25px 30px;
-    border-radius: 20px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 20px;
 }
 
-button {
-    font-size: clamp(1.5rem, 5vw, 2.5rem);
-    padding: 20px 45px;
+/* Botón SÍ - siempre visible en su posición */
+#yesBtn {
+    font-size: clamp(1.3rem, 4vw, 2rem); /* Tamaño reducido */
+    padding: 15px 30px;
     border: none;
-    border-radius: 15px;
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
-    min-width: 160px;
+    min-width: 120px;
     font-weight: 900;
-    box-shadow: 0 8px 0 rgba(0, 0, 0, 0.4);
-    position: relative;
-    z-index: 20;
-}
-
-#yesBtn {
+    box-shadow: 0 5px 0 rgba(0, 0, 0, 0.4);
     background: linear-gradient(145deg, #00C853, #00E676);
     color: white;
-    border: 3px solid #00E676;
+    border: 2px solid #00E676;
+    position: relative;
+    z-index: 20;
+    margin: 0 10px;
 }
 
 #yesBtn:hover, #yesBtn:active {
     background: linear-gradient(145deg, #00E676, #00C853);
-    transform: translateY(-5px);
-    box-shadow: 0 12px 0 rgba(0, 0, 0, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 0 rgba(0, 0, 0, 0.4);
 }
 
+/* Botón NO - este se moverá */
 #noBtn {
+    font-size: clamp(1.3rem, 4vw, 2rem); /* MISMO tamaño que SÍ */
+    padding: 15px 30px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    min-width: 120px;
+    font-weight: 900;
+    box-shadow: 0 5px 0 rgba(0, 0, 0, 0.4);
     background: linear-gradient(145deg, #FF1744, #F50057);
     color: white;
-    border: 3px solid #FF4081;
+    border: 2px solid #FF4081;
+    position: absolute; /* Importante: será posicionado absolutamente dentro de .botones-container */
+    z-index: 25;
 }
 
 #noBtn:hover, #noBtn:active {
     background: linear-gradient(145deg, #F50057, #FF1744);
-    transform: translateY(-5px);
+    transform: translateY(-3px);
 }
 
-/* Media Queries para móviles */
+/* Media Queries para móviles - AJUSTES CRÍTICOS */
 @media (max-width: 768px) {
     .contenedor {
-        padding: 15px;
+        padding: 10px;
         justify-content: space-around;
     }
     
     .texto-container {
-        padding: 30px 20px;
-        margin-bottom: 30px;
+        padding: 20px 15px;
+        margin-bottom: 20px;
         width: 95%;
-        border-radius: 20px;
+        border-radius: 15px;
     }
     
     p {
-        font-size: clamp(2rem, 7vw, 3.5rem);
-        letter-spacing: 1px;
+        font-size: clamp(1.6rem, 5vw, 2.5rem);
+        letter-spacing: 0.5px;
     }
     
     .botones-container {
         flex-direction: column;
-        gap: 25px;
         width: 95%;
-        padding: 20px;
-        margin-top: 20px;
+        padding: 15px;
+        margin-top: 10px;
+        min-height: 150px; /* Más alto en móvil */
     }
     
-    button {
-        width: 100%;
-        max-width: 280px;
-        padding: 18px 35px;
-        font-size: 2rem;
+    #yesBtn, #noBtn {
+        width: 180px !important; /* Ancho fijo para móvil */
+        max-width: 200px;
+        padding: 12px 25px;
+        font-size: 1.5rem;
+        margin: 5px 0;
+    }
+    
+    #yesBtn {
+        position: relative;
+        margin-bottom: 20px;
     }
 }
 
 @media (max-width: 480px) {
     .texto-container {
-        padding: 25px 15px;
-        margin-bottom: 25px;
+        padding: 15px 10px;
+        margin-bottom: 15px;
     }
     
     p {
-        font-size: 2.2rem;
+        font-size: 1.8rem;
         line-height: 1.1;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.3px;
     }
     
     .botones-container {
-        padding: 15px;
-        gap: 20px;
+        padding: 10px;
+        min-height: 140px;
     }
     
-    button {
-        padding: 15px 30px;
-        font-size: 1.8rem;
-        min-width: 140px;
+    #yesBtn, #noBtn {
+        width: 160px !important;
+        padding: 10px 20px;
+        font-size: 1.3rem;
+        min-width: 100px;
     }
 }
 
-/* Reglas de fuerza máxima para asegurar texto blanco */
-p {
-    color: white !important;
-    -webkit-text-fill-color: white !important;
-    fill: white !important;
-}
-
-.texto-container p {
-    color: #FFFFFF !important;
+/* Regla especial para pantallas muy pequeñas */
+@media (max-width: 360px) {
+    p {
+        font-size: 1.5rem;
+    }
+    
+    #yesBtn, #noBtn {
+        width: 140px !important;
+        padding: 8px 16px;
+        font-size: 1.2rem;
+    }
 }
