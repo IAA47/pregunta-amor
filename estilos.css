@@ -42,16 +42,10 @@ body {
 
 /* Contenedor del texto */
 .texto-container {
-    position: relative;
-    z-index: 2;
-    width: 90%;
-    max-width: 800px;
-    margin-bottom: 50px;
-    padding: 30px;
-    background: rgba(0, 0, 0, 0.7);
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-    border: 3px solid #ff4081;
+    background: rgba(0, 0, 0, 0.9);
+    border: 5px solid #FF4081;
+    padding: 40px;
+    border-radius: 25px;
 }
 
 p {
@@ -201,4 +195,5 @@ button {
     color: #FF4081; /* Rosa brillante */
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
+
 
