@@ -7,20 +7,18 @@
     <title>¿ME QUIERES MÁS QUE YO?</title>
     <link rel="stylesheet" href="estilos.css">
     <style>
-        /* Estilos adicionales para asegurar funcionamiento en móvil */
+        /* Estilos adicionales para móvil */
         html, body {
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
+            overflow: hidden;
         }
         
-        button {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-        }
-        
-        .texto-blanco {
-            color: white !important;
+        * {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
     </style>
 </head>
@@ -28,14 +26,16 @@
     <div class="contenedor">
         <!-- Contenedor para el texto -->
         <div class="texto-container">
-            <p class="texto-blanco">¿YO TE QUIERO MÁS QUE TÚ?</p>
+            <p>¿YO TE QUIERO MÁS QUE TÚ?</p>
         </div>
         
-        <!-- Contenedor para los botones - El botón NO se moverá DENTRO de este contenedor -->
-        <div class="botones-container">
+        <!-- Contenedor para el botón SÍ -->
+        <div class="boton-si-container">
             <button id="yesBtn">SÍ</button>
-            <button id="noBtn">NO</button>
         </div>
+        
+        <!-- El botón NO estará posicionado absolutamente en toda la pantalla -->
+        <button id="noBtn">NO</button>
     </div>
     
     <script src="index.js"></script>
