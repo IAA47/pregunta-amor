@@ -7,10 +7,20 @@
     <title>¿ME QUIERES MÁS QUE YO?</title>
     <link rel="stylesheet" href="estilos.css">
     <style>
-        /* Regla de emergencia inline para asegurar texto blanco */
+        /* Estilos adicionales para asegurar funcionamiento en móvil */
+        html, body {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        button {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        
         .texto-blanco {
             color: white !important;
-            -webkit-text-fill-color: white !important;
         }
     </style>
 </head>
@@ -21,12 +31,13 @@
             <p class="texto-blanco">¿YO TE QUIERO MÁS QUE TÚ?</p>
         </div>
         
-        <!-- Contenedor para los botones -->
+        <!-- Contenedor para los botones - El botón NO se moverá DENTRO de este contenedor -->
         <div class="botones-container">
             <button id="yesBtn">SÍ</button>
             <button id="noBtn">NO</button>
         </div>
     </div>
+    
     <script src="index.js"></script>
 </body>
 </html>
