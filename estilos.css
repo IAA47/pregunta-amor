@@ -4,65 +4,105 @@
     box-sizing: border-box;
 }
 
-/* Fuerza visibilidad en todos los dispositivos */
-html, body {
-    width: 100% !important;
-    height: 100% !important;
-    overflow: hidden !important;
+body {
+    font-family: 'Arial Black', 'Arial Bold', sans-serif;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
 }
 
 .contenedor {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    background-color: #000 !important;
+    background: url('Ale.jpeg') no-repeat center center;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
 }
 
+/* Fondo oscuro semitransparente detrás del texto */
+.contenedor::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+/* Contenedor del texto - AQUÍ LA CLAVE */
 .texto-container {
-    background-color: #000 !important;
-    border: 5px solid #FF4081 !important;
-    padding: 30px !important;
-    border-radius: 20px !important;
-    box-shadow: 0 0 50px rgba(255, 64, 129, 0.7) !important;
+    position: relative;
+    z-index: 10;
+    width: 90%;
+    max-width: 800px;
+    margin-bottom: 50px;
+    padding: 40px 30px;
+    background: rgba(0, 0, 0, 0.85); /* Fondo casi negro */
+    border-radius: 25px;
+    box-shadow: 
+        0 0 0 10px rgba(255, 255, 255, 0.2), /* Borde blanco tenue */
+        0 15px 40px rgba(0, 0, 0, 0.9);
+    border: 3px solid #FFFFFF;
 }
 
+/* TEXTO EN BLANCO - como solicitaste */
 p {
-    color: #FF4081 !important;
-    font-size: 3rem !important;
-    text-align: center !important;
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    color: #FFFFFF !important; /* FORZAR BLANCO */
+    text-shadow: 
+        0px 0px 10px rgba(255, 255, 255, 0.5),
+        0px 0px 20px rgba(255, 255, 255, 0.3),
+        3px 3px 0 #000000,
+        2px 2px 0 #000000,
+        1px 1px 0 #000000,
+        -1px -1px 0 #000000,
+        1px -1px 0 #000000,
+        -1px 1px 0 #000000;
+    margin: 0;
+    padding: 0;
+    line-height: 1.2;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
 }
 
 /* Contenedor de botones */
 .botones-container {
     position: relative;
-    z-index: 2;
+    z-index: 10;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 30px;
+    gap: 40px;
     width: 90%;
     max-width: 600px;
-    background: rgba(0, 0, 0, 0.7);
-    padding: 20px;
-    border-radius: 15px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 25px 30px;
+    border-radius: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 button {
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
-    padding: 20px 40px;
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    padding: 20px 45px;
     border: none;
     border-radius: 15px;
     cursor: pointer;
     transition: all 0.3s ease;
-    min-width: 150px;
+    min-width: 160px;
     font-weight: 900;
-    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 0 rgba(0, 0, 0, 0.4);
     position: relative;
-    z-index: 3;
+    z-index: 20;
 }
 
 #yesBtn {
@@ -73,8 +113,8 @@ button {
 
 #yesBtn:hover, #yesBtn:active {
     background: linear-gradient(145deg, #00E676, #00C853);
-    transform: translateY(-3px);
-    box-shadow: 0 9px 0 rgba(0, 0, 0, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 0 rgba(0, 0, 0, 0.4);
 }
 
 #noBtn {
@@ -85,84 +125,75 @@ button {
 
 #noBtn:hover, #noBtn:active {
     background: linear-gradient(145deg, #F50057, #FF1744);
-    transform: translateY(-3px);
+    transform: translateY(-5px);
 }
 
 /* Media Queries para móviles */
 @media (max-width: 768px) {
     .contenedor {
-        padding: 10px;
+        padding: 15px;
+        justify-content: space-around;
     }
     
     .texto-container {
-        padding: 20px;
+        padding: 30px 20px;
         margin-bottom: 30px;
         width: 95%;
+        border-radius: 20px;
     }
     
     p {
-        font-size: clamp(1.8rem, 8vw, 3rem);
-        text-shadow: 
-            2px 2px 0 #000,
-            -1px -1px 0 #000,  
-            1px -1px 0 #000,
-            -1px 1px 0 #000,
-            1px 1px 0 #000;
+        font-size: clamp(2rem, 7vw, 3.5rem);
+        letter-spacing: 1px;
     }
     
     .botones-container {
         flex-direction: column;
-        gap: 20px;
+        gap: 25px;
         width: 95%;
-        padding: 15px;
+        padding: 20px;
+        margin-top: 20px;
     }
     
     button {
         width: 100%;
-        max-width: 250px;
-        padding: 15px 25px;
-        font-size: 1.8rem;
+        max-width: 280px;
+        padding: 18px 35px;
+        font-size: 2rem;
     }
 }
 
 @media (max-width: 480px) {
     .texto-container {
-        padding: 15px;
-        margin-bottom: 20px;
+        padding: 25px 15px;
+        margin-bottom: 25px;
     }
     
     p {
-        font-size: 2rem;
-        line-height: 1.2;
+        font-size: 2.2rem;
+        line-height: 1.1;
+        letter-spacing: 0.5px;
     }
     
     .botones-container {
-        padding: 10px;
-        gap: 15px;
+        padding: 15px;
+        gap: 20px;
     }
     
     button {
-        padding: 12px 20px;
-        font-size: 1.5rem;
-        min-width: 130px;
+        padding: 15px 30px;
+        font-size: 1.8rem;
+        min-width: 140px;
     }
 }
 
-/* Asegurar que el texto sea visible en cualquier fondo */
-.texto-alternativo {
-    color: #FFEB3B; /* Amarillo brillante */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+/* Reglas de fuerza máxima para asegurar texto blanco */
+p {
+    color: white !important;
+    -webkit-text-fill-color: white !important;
+    fill: white !important;
 }
 
-.texto-alternativo-2 {
-    color: #00E5FF; /* Cyan brillante */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+.texto-container p {
+    color: #FFFFFF !important;
 }
-
-.texto-alternativo-3 {
-    color: #FF4081; /* Rosa brillante */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-}
-
-
-
